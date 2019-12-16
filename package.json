@@ -23,16 +23,16 @@
     "style-loader": "^0.13.0",
     "webpack": "2.2.1",
     "webpack-dev-server": "^2.3.0",
+    "node-sass": "^4.13.0",
+    "sass-loader": "^7.1.0",
     "write-file-webpack-plugin": "3.4.2"
   },
   "dependencies": {
     "classnames": "^2.2.6",
-    "node-sass": "^4.13.0",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
     "react-flex-panel": "^1.0.0",
     "react-fontawesome": "^1.7.1",
-    "react-inspector": "^2.3.0",
-    "sass-loader": "^7.1.0"
+    "react-inspector": "^2.3.0"
   }
 }
