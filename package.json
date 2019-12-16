@@ -27,11 +27,11 @@
   },
   "dependencies": {
     "classnames": "^2.2.6",
-    "node-sass": "^4.9.3",
+    "node-sass": "^4.13.0",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
     "react-flex-panel": "^1.0.0",
-    "react-fontawesome": "^1.6.1",
+    "react-fontawesome": "^1.7.1",
     "react-inspector": "^2.3.0",
     "sass-loader": "^7.1.0"
   }
