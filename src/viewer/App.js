@@ -42,8 +42,16 @@ class ListControls extends React.Component {
     }
   };
 
+  openFilter = () => {
+    if (this.state.openInput === 'filter') {
+      this.setState({ openInput: null });
+    } else {
+      this.setState({ openInput: 'filter' });
+    }
+  };
+
   render() {
-    const { onClear, onStart, onStop, regName, onRegName, capturing } = this.props;
+    const { onClear, onStart, onStop, regName, onRegName, capturing, filter, onFilter } = this.props;
     return (
       <div className="list-controls">
         { capturing ? (
@@ -53,6 +61,7 @@ class ListControls extends React.Component {
         ) }
         <FontAwesome className="list-button" name="ban" onClick={ onClear } title="Clear" />
         <span className={ 'separator' } />
+        {/* name */ }
         <FontAwesome
           className={ cx('list-button', {
             active: !!regName
@@ -74,6 +83,28 @@ class ListControls extends React.Component {
             onChange={ onRegName }
           />
         </div>
+        {/* filter */ }
+        <FontAwesome
+          className={ cx('list-button', {
+            active: !!filter
+          }) }
+          name="filter"
+          onClick={ this.openFilter }
+          title="Filter"
+        />
+        <div
+          className={ cx('input-wrap', {
+            hide: this.state.openInput !== 'filter'
+          }) }
+        >
+          <input
+            className={ 'input' }
+            name={ 'open-filter' }
+            placeholder={ 'Filter regexp' }
+            value={ filter }
+            onChange={ onFilter }
+          />
+        </div>
       </div>
     );
   }
@@ -85,19 +116,42 @@ class FrameList extends React.Component {
   };
 
   render() {
-    const { frames, activeId, onSelect, regName } = this.props;
+    const { frames, activeId, onSelect, regName, filter } = this.props;
+    console.log(`–––  \n filter `, filter, `\n –––`);
     return (
       <ul className="frame-list" onClick={ this.handlerClearSelect }>
         { frames.map(frame => (
-          <FrameEntry key={ frame.id } frame={ frame } selected={ frame.id === activeId } regName={ regName }
-                      onSelect={ onSelect } />
+          <FrameEntry
+            key={ frame.id }
+            frame={ frame }
+            selected={ frame.id === activeId }
+            regName={ regName }
+            onSelect={ onSelect }
+            filter={ filter }
+          />
         )) }
       </ul>
     );
   }
 }
 
-class FrameEntry extends React.Component {
+function grep(text, regexp) {
+  if (!(text && regexp)) {
+    return;
+  }
+  try {
+    let matchAll = text.matchAll(regexp);
+
+    matchAll = Array.from(matchAll);
+    const firstMach = matchAll[0][1] || matchAll[0][0];
+    if (firstMach) {
+      return firstMach;
+    }
+  } catch (e) {
+  }
+}
+
+class FrameEntry extends React.PureComponent {
   handlerSelect = e => {
     e.stopPropagation();
     this.props.onSelect(this.props.frame.id);
@@ -106,27 +160,21 @@ class FrameEntry extends React.Component {
   getName() {
     const { frame, regName } = this.props;
     if (frame.text != null) {
-      if (regName) {
-        try {
-          let matchAll = frame.text.matchAll(regName);
-
-          matchAll = Array.from(matchAll); // теп
-          const firstMach = matchAll[0][1] || matchAll[0][0];
-          if (firstMach) {
-            return firstMach;
-          }
-        } catch (e) {
-        }
-      }
-      return 'Text Frame';
+      return grep(frame.text, regName) || frame.text;
     } else {
       return 'Binary Frame';
     }
   }
 
+  checkViable() {
+    const { frame, filter } = this.props;
+
+    return !!grep(frame.text, filter);
+  }
+
   render() {
     let { frame, selected } = this.props;
-
+    if (this.checkViable()) return null;
     return (
       <li className={ cx('frame', 'frame-' + frame.type, { 'frame-selected': selected }) }
           onClick={ this.handlerSelect }>
@@ -206,8 +254,8 @@ export default class App extends React.Component {
   _uniqueId = 0;
   _issueTime = null;
   _issueWallTime = null;
-  state = { frames: [], activeId: null, capturing: true, regName: '' };
-  cacheKey = ['capturing', 'regName'];
+  state = { frames: [], activeId: null, capturing: true, regName: '', filter: '' };
+  cacheKey = ['capturing', 'regName', 'filter'];
 
   constructor(props) {
     super(props);
@@ -228,7 +276,7 @@ export default class App extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    this.cacheKey.forEach(key=>{
+    this.cacheKey.forEach(key => {
       if (prevState[key] !== this.state[key]) {
         localStorage.setItem(key, this.state[key])
       }
@@ -244,7 +292,7 @@ export default class App extends React.Component {
   }
 
   render() {
-    const { frames, activeId, regName } = this.state;
+    const { frames, activeId, regName, filter } = this.state;
     const active = frames.find(f => f.id === activeId);
     return (
       <Panel cols className="App">
@@ -256,8 +304,16 @@ export default class App extends React.Component {
             onStop={ this.stopCapture }
             regName={ regName }
             onRegName={ this.setRegName }
+            filter={ filter }
+            onFilter={ this.setFilter }
           />
-          <FrameList frames={ frames } activeId={ activeId } onSelect={ this.selectFrame } regName={ regName } />
+          <FrameList
+            frames={ frames }
+            activeId={ activeId }
+            onSelect={ this.selectFrame }
+            regName={ regName }
+            filter={ filter }
+          />
         </Panel>
         <Panel minSize={ 100 } className="PanelView">
           { active != null ? <FrameView frame={ active } /> :
@@ -285,6 +341,9 @@ export default class App extends React.Component {
 
   setRegName = e => {
     this.setState({ regName: e.target.value });
+  };
+  setFilter = e => {
+    this.setState({ filter: e.target.value });
   };
 
   addFrame(type, timestamp, response) {
