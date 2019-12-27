@@ -1,5 +1,4 @@
 :root {
-
   --accent-color: #1a73e8;
 }
 
@@ -33,6 +32,7 @@
   border: 0 solid transparent !important;
   outline: 0 solid transparent !important;
   transition: all 200ms;
+  margin: 1px;
 
   &:hover {
     box-shadow: 0 0 0 1px #e0e0e0;

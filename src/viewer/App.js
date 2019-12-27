@@ -69,7 +69,7 @@ class ListControls extends React.Component {
           <input
             className={ 'input' }
             name={ 'reg-name' }
-            placeholder={ 'Name regexp:  type=".+"' }
+            placeholder={ 'Name regexp:  "type":"(\\w+)"' }
             value={ regName }
             onChange={ onRegName }
           />
@@ -207,12 +207,32 @@ export default class App extends React.Component {
   _issueTime = null;
   _issueWallTime = null;
   state = { frames: [], activeId: null, capturing: true, regName: '' };
+  cacheKey = ['capturing', 'regName'];
 
   constructor(props) {
     super(props);
-
     props.handlers['Network.webSocketFrameReceived'] = this.webSocketFrameReceived.bind(this);
     props.handlers['Network.webSocketFrameSent'] = this.webSocketFrameSent.bind(this);
+  }
+
+  componentDidMount() {
+    const cacheState = this.cacheKey.reduce((acc, key) => {
+      const value = localStorage.getItem(key);
+      if (value !== null && value !== undefined) {
+        acc[key] = value
+      }
+      return acc
+    }, {});
+    this.setState(cacheState)
+
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    this.cacheKey.forEach(key=>{
+      if (prevState[key] !== this.state[key]) {
+        localStorage.setItem(key, this.state[key])
+      }
+    })
   }
 
   getTime(timestamp) {
