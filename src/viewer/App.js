@@ -117,7 +117,6 @@ class FrameList extends React.Component {
 
   render() {
     const { frames, activeId, onSelect, regName, filter } = this.props;
-    console.log(`–––  \n filter `, filter, `\n –––`);
     return (
       <ul className="frame-list" onClick={ this.handlerClearSelect }>
         { frames.map(frame => (
