@@ -31,8 +31,8 @@ const TimeStamp = ({ time }) => {
 
 class ListControls extends React.Component {
   state = {
-    openInput: null // 'filter' | 'name'
-  };
+    openInput: null, //   'name'
+     };
 
   openNameReg = () => {
     if (this.state.openInput === 'name') {
@@ -42,16 +42,10 @@ class ListControls extends React.Component {
     }
   };
 
-  openFilter = () => {
-    if (this.state.openInput === 'filter') {
-      this.setState({ openInput: null });
-    } else {
-      this.setState({ openInput: 'filter' });
-    }
-  };
+
 
   render() {
-    const { onClear, onStart, onStop, regName, onRegName, capturing, filter, onFilter } = this.props;
+    const { onClear, onStart, onStop, regName, onRegName, capturing, filter, onFilter, filterMode, onFilterModeToExclude, onFilterModeToInclude} = this.props;
     return (
       <div className="list-controls">
         { capturing ? (
@@ -83,18 +77,17 @@ class ListControls extends React.Component {
             onChange={ onRegName }
           />
         </div>
+
         {/* filter */ }
-        <FontAwesome
-          className={ cx('list-button', {
-            active: !!filter
-          }) }
-          name="filter"
-          onClick={ this.openFilter }
-          title="Filter"
-        />
+        { filterMode === 'exclude' ? (
+            <FontAwesome className="list-button" onClick={ onFilterModeToInclude } title={"Filter "+ filterMode} name="minus-square" />
+        ) : (
+            <FontAwesome className="list-button" onClick={ onFilterModeToExclude } title={"Filter "+ filterMode} name="plus-square" />
+        ) }
+
         <div
           className={ cx('input-wrap', {
-            hide: this.state.openInput !== 'filter'
+            hide: false//this.state.openInput !== 'filter'
           }) }
         >
           <input
@@ -103,6 +96,7 @@ class ListControls extends React.Component {
             placeholder={ 'Filter regexp' }
             value={ filter }
             onChange={ onFilter }
+
           />
         </div>
       </div>
@@ -116,7 +110,7 @@ class FrameList extends React.Component {
   };
 
   render() {
-    const { frames, activeId, onSelect, regName, filter } = this.props;
+    const { frames, activeId, onSelect, regName, filter, filterMode } = this.props;
     return (
       <ul className="frame-list" onClick={ this.handlerClearSelect }>
         { frames.map(frame => (
@@ -127,6 +121,7 @@ class FrameList extends React.Component {
             regName={ regName }
             onSelect={ onSelect }
             filter={ filter }
+            filterMode={filterMode}
           />
         )) }
       </ul>
@@ -166,13 +161,19 @@ class FrameEntry extends React.PureComponent {
   }
 
   checkViable() {
-    const { frame, filter } = this.props;
+    const { frame, filter, filterMode } = this.props;
+    if (filterMode === 'exclude') {
+      return !!grep(frame.text, filter);
+    } else if (filterMode === 'include') {
+      return !grep(frame.text, filter);
+    }
 
-    return !!grep(frame.text, filter);
+
+
   }
 
   render() {
-    let { frame, selected } = this.props;
+    let { frame, selected, filterMode } = this.props;
     if (this.checkViable()) return null;
     return (
       <li className={ cx('frame', 'frame-' + frame.type, { 'frame-selected': selected }) }
@@ -253,8 +254,8 @@ export default class App extends React.Component {
   _uniqueId = 0;
   _issueTime = null;
   _issueWallTime = null;
-  state = { frames: [], activeId: null, capturing: true, regName: '', filter: '' };
-  cacheKey = ['capturing', 'regName', 'filter'];
+  state = { frames: [], activeId: null, capturing: true, regName: '', filter: '', filterMode: 'exclude' };
+  cacheKey = ['capturing', 'regName', 'filter', 'filterMode'];
 
   constructor(props) {
     super(props);
@@ -291,7 +292,7 @@ export default class App extends React.Component {
   }
 
   render() {
-    const { frames, activeId, regName, filter } = this.state;
+    const { frames, activeId, regName, filter, filterMode } = this.state;
     const active = frames.find(f => f.id === activeId);
     return (
       <Panel cols className="App">
@@ -305,6 +306,11 @@ export default class App extends React.Component {
             onRegName={ this.setRegName }
             filter={ filter }
             onFilter={ this.setFilter }
+            filterMode={ this.state.filterMode}
+            onFilterModeToExclude={ this.onFilterModeToExclude}
+            onFilterModeToInclude={ this.onFilterModeToInclude}
+
+
           />
           <FrameList
             frames={ frames }
@@ -312,6 +318,7 @@ export default class App extends React.Component {
             onSelect={ this.selectFrame }
             regName={ regName }
             filter={ filter }
+            filterMode={ filterMode }
           />
         </Panel>
         <Panel minSize={ 100 } className="PanelView">
@@ -343,6 +350,14 @@ export default class App extends React.Component {
   };
   setFilter = e => {
     this.setState({ filter: e.target.value });
+  };
+
+  onFilterModeToExclude = () => {
+    this.setState({filterMode: 'exclude'})
+  };
+
+  onFilterModeToInclude = () => {
+    this.setState({filterMode: 'include'})
   };
 
   addFrame(type, timestamp, response) {
