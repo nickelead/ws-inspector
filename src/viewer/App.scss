@@ -14,6 +14,7 @@
   overflow: hidden;
   max-width: 500px;
   transition: all 500ms;
+  white-space: nowrap;
 
   &.hide {
     max-width: 0;
@@ -22,7 +23,7 @@
 
 .input {
   padding-left: 3px;
-  width: 163px;
+  width: 120px;
   height: 18px;
   line-height: 20px;
   display: inline-block;
