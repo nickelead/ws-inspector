@@ -3,11 +3,12 @@ import Panel from 'react-flex-panel';
 import FontAwesome from 'react-fontawesome';
 import cx from 'classnames';
 import HexViewer from './HexViewer';
+import grep from './Helper.js';
+import TimeStamp from './Helper.js';
+
 import {ObjectInspector} from 'react-inspector';
 
 import './App.scss';
-
-const padded = (num, d) => num.toFixed(0).padStart(d, '0');
 
 const stringToBuffer = str => {
     const ui8 = new Uint8Array(str.length);
@@ -15,18 +16,6 @@ const stringToBuffer = str => {
         ui8[i] = str.charCodeAt(i);
     }
     return ui8;
-};
-
-const TimeStamp = ({time}) => {
-    const h = time.getHours();
-    const m = time.getMinutes();
-    const s = time.getSeconds();
-    const ms = time.getMilliseconds();
-    return (
-        <span className="timestamp">
-      {padded(h, 2)}:{padded(m, 2)}:{padded(s, 2)}.{padded(ms, 3)}
-    </span>
-    );
 };
 
 class ListControls extends React.Component {
@@ -143,22 +132,6 @@ class FrameList extends React.Component {
     }
 }
 
-function grep(text, regexp) {
-    if (!(text && regexp)) {
-        return;
-    }
-    try {
-        let matchAll = text.matchAll(regexp);
-
-        matchAll = Array.from(matchAll);
-        const firstMach = matchAll[0][1] || matchAll[0][0];
-        if (firstMach) {
-            return firstMach;
-        }
-    } catch (e) {
-    }
-}
-
 class FrameEntry extends React.PureComponent {
     handlerSelect = e => {
         e.stopPropagation();
@@ -193,7 +166,7 @@ class FrameEntry extends React.PureComponent {
             <li className={cx('frame', 'frame-' + frame.type, {'frame-selected': selected})}
                 onClick={this.handlerSelect}>
                 <FontAwesome name={frame.type === 'incoming' ? 'arrow-circle-down' : 'arrow-circle-up'}/>
-                <TimeStamp time={frame.time}/>
+                <span className="timestamp">{TimeStamp(frame.time)}</span>
                 <span className="name">{this.getName()}</span>
                 <span className="length">{frame.length}</span>
             </li>
