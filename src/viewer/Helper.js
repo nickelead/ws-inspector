@@ -1,6 +1,6 @@
 
 
-export default function grep(text, regexp) {
+export function grep(text, regexp) {
     if (!(text && regexp)) {
         return;
     }
@@ -17,7 +17,7 @@ export default function grep(text, regexp) {
 }
 const padded = (num, d) => num.toFixed(0).padStart(d, '0');
 
-export const TimeStamp = ({time}) => {
+export const TimeStamp = (time) => {
     const h = time.getHours();
     const m = time.getMinutes();
     const s = time.getSeconds();
@@ -28,3 +28,4 @@ export const TimeStamp = ({time}) => {
 
     );
 };
+

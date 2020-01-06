@@ -3,8 +3,8 @@ import Panel from 'react-flex-panel';
 import FontAwesome from 'react-fontawesome';
 import cx from 'classnames';
 import HexViewer from './HexViewer';
-import grep from './Helper.js';
-import TimeStamp from './Helper.js';
+import {grep, TimeStamp} from './Helper.js';
+
 
 import {ObjectInspector} from 'react-inspector';
 
