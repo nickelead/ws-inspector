@@ -40,14 +40,10 @@ class ListControls extends React.Component {
     };
 
     render() {
-        const {onClear, onStart, onStop, regName, onRegName, capturing, filter, onFilter, isFilterInverse, onFilterModeToggle} = this.props;
+        const {onClear, onCapturingToggle, regName, onRegName, isCapturing, filter, onFilter, isFilterInverse, onFilterModeToggle} = this.props;
         return (
             <div className="list-controls">
-                {capturing ? (
-                    <span className="list-button record active" onClick={onStop} title="Stop"/>
-                ) : (
-                    <span className="list-button record" onClick={onStart} title="Start"/>
-                )}
+                <span className={isCapturing ? "list-button record active" : "list-button record"} onClick={onCapturingToggle} title={isCapturing ? "Stop" : "Start"}/>
                 <FontAwesome className="list-button" name="ban" onClick={onClear} title="Clear"/>
                 <span className={'separator'}/>
                 {/* name */}
@@ -247,8 +243,8 @@ export default class App extends React.Component {
     _uniqueId = 0;
     _issueTime = null;
     _issueWallTime = null;
-    state = {frames: [], activeId: null, capturing: true, regName: '', filter: '', isFilterInverse: false};
-    cacheKey = ['capturing', 'regName', 'filter', 'filterMode'];
+    state = {frames: [], activeId: null, isCapturing: true, regName: '', filter: '', isFilterInverse: false};
+    cacheKey = ['isCapturing', 'regName', 'filter', 'filterMode'];
 
     constructor(props) {
         super(props);
@@ -292,9 +288,8 @@ export default class App extends React.Component {
                 <Panel size={330} minSize={180} resizable className="LeftPanel">
                     <ListControls
                         onClear={this.clearFrames}
-                        onStart={this.startCapture}
-                        capturing={this.state.capturing}
-                        onStop={this.stopCapture}
+                        onCapturingToggle={this.onCapturingToggle}
+                        isCapturing={this.state.isCapturing}
                         regName={regName}
                         onRegName={this.setRegName}
                         filter={filter}
@@ -329,13 +324,9 @@ export default class App extends React.Component {
         this.setState({frames: []});
     };
 
-    startCapture = () => {
-        this.setState({capturing: true});
-    };
-
-    stopCapture = () => {
-        this.setState({capturing: false});
-    };
+    onCapturingToggle = () => {
+        this.setState({isCapturing: !this.state.isCapturing});
+    }
 
     setRegName = e => {
         this.setState({regName: e.target.value});
@@ -369,13 +360,13 @@ export default class App extends React.Component {
     }
 
     webSocketFrameReceived({timestamp, response}) {
-        if (this.state.capturing === true) {
+        if (this.state.isCapturing === true) {
             this.addFrame('incoming', timestamp, response);
         }
     }
 
     webSocketFrameSent({timestamp, response}) {
-        if (this.state.capturing === true) {
+        if (this.state.isCapturing === true) {
             this.addFrame('outgoing', timestamp, response);
         }
     }
