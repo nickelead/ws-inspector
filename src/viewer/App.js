@@ -5,11 +5,9 @@ import cx from 'classnames';
 import HexViewer from './HexViewer';
 import {grep, TimeStamp} from './Helper.js';
 import ListControls from "./ListControls";
-
+import './App.scss';
 
 import {ObjectInspector} from 'react-inspector';
-
-import './App.scss';
 
 const stringToBuffer = str => {
     const ui8 = new Uint8Array(str.length);
@@ -72,7 +70,7 @@ class FrameEntry extends React.PureComponent {
     }
 
     render() {
-        let {frame, selected, filterMode} = this.props;
+        let {frame, selected} = this.props;
         if (this.checkViable()) return null;
         return (
             <li className={cx('frame', 'frame-' + frame.type, {'frame-selected': selected})}
@@ -159,13 +157,13 @@ export default class App extends React.Component {
     _uniqueId = 0;
     _issueTime = null;
     _issueWallTime = null;
-    state = {frames: [], activeId: null, isCapturing: true, regName: '', filter: '', isFilterInverse: false};
-    cacheKey = ['isCapturing', 'regName', 'filter', 'filterMode'];
+    cacheKey = ['isCapturing', 'regName', 'filter', 'isFilterInverse'];
 
     constructor(props) {
         super(props);
         props.handlers['Network.webSocketFrameReceived'] = this.webSocketFrameReceived.bind(this);
         props.handlers['Network.webSocketFrameSent'] = this.webSocketFrameSent.bind(this);
+        this.state = {frames: [], activeId: null, isCapturing: true, regName: '', filter: '', isFilterInverse: false};
     }
 
     componentDidMount() {
@@ -177,7 +175,7 @@ export default class App extends React.Component {
             return acc
         }, {});
         this.setState(cacheState)
-
+// Boolean values turns to strings.
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -197,7 +195,7 @@ export default class App extends React.Component {
     }
 
     render() {
-        const {frames, activeId, regName, filter, isFilterInverse} = this.state;
+        const {frames, activeId, regName, filter, isFilterInverse, isCapturing} = this.state;
         const active = frames.find(f => f.id === activeId);
         return (
             <Panel cols className="App">
@@ -205,7 +203,7 @@ export default class App extends React.Component {
                     <ListControls
                         onClear={this.clearFrames}
                         onCapturingToggle={this.onCapturingToggle}
-                        isCapturing={this.state.isCapturing}
+                        isCapturing={isCapturing}
                         regName={regName}
                         onRegName={this.setRegName}
                         filter={filter}
@@ -276,13 +274,13 @@ export default class App extends React.Component {
     }
 
     webSocketFrameReceived({timestamp, response}) {
-        if (this.state.isCapturing === true) {
+        if (this.state.isCapturing === true || this.state.isCapturing === 'true' ) {// see componentDidMount()
             this.addFrame('incoming', timestamp, response);
         }
     }
 
     webSocketFrameSent({timestamp, response}) {
-        if (this.state.isCapturing === true) {
+        if (this.state.isCapturing === true || this.state.isCapturing === 'true' ) {// see componentDidMount()
             this.addFrame('outgoing', timestamp, response);
         }
     }

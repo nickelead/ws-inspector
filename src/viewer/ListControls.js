@@ -7,7 +7,6 @@ import './App.scss';
 export default class ListControls extends React.Component {
     state = {
         openInput: null,// 'filter' | 'name'
-        isCapturing: true
     };
 
     openNameReg = () => {
