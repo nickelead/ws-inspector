@@ -2,7 +2,6 @@ import React from 'react';
 import FontAwesome from 'react-fontawesome';
 import cx from "classnames";
 import './ListControls.scss';
-import './App.scss';
 
 export default class ListControls extends React.Component {
     state = {

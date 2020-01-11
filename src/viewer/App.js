@@ -3,7 +3,7 @@ import Panel from 'react-flex-panel';
 import ListControls from "./ListControls/ListControls";
 import FrameList from "./FrameTable/FrameTable";
 import FrameView from "./PanelView/PanelView";
-import stringToBuffer from "./Helpers/Helper"
+import {stringToBuffer} from "./Helpers/Helper"
 import './App.scss';
 
 
@@ -29,7 +29,7 @@ export default class App extends React.Component {
             return acc
         }, {});
         this.setState(cacheState)
-// Boolean values turns to strings.
+// TODO Boolean values turns to strings.
     }
 
     componentDidUpdate(prevProps, prevState) {

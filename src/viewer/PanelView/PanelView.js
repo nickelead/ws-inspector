@@ -2,6 +2,7 @@ import {ObjectInspector} from "react-inspector";
 import React from "react";
 import cx from "classnames";
 import HexViewer from "./HexViewer";
+import "./PanelView.scss";
 
 const TextViewer = ({data}) => <div className="TextViewer tab-pane">{data}</div>;
 
