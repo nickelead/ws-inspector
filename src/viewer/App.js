@@ -3,16 +3,9 @@ import Panel from 'react-flex-panel';
 import ListControls from "./ListControls/ListControls";
 import FrameList from "./FrameTable/FrameTable";
 import FrameView from "./PanelView/PanelView";
+import stringToBuffer from "./Helpers/Helper"
 import './App.scss';
 
-
-const stringToBuffer = str => {
-    const ui8 = new Uint8Array(str.length);
-    for (let i = 0; i < str.length; ++i) {
-        ui8[i] = str.charCodeAt(i);
-    }
-    return ui8;
-};
 
 export default class App extends React.Component {
     _uniqueId = 0;

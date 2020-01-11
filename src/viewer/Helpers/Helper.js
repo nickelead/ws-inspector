@@ -29,3 +29,12 @@ export const TimeStamp = (time) => {
     );
 };
 
+export const stringToBuffer = str => {
+    const ui8 = new Uint8Array(str.length);
+    for (let i = 0; i < str.length; ++i) {
+        ui8[i] = str.charCodeAt(i);
+    }
+    return ui8;
+};
+
+
