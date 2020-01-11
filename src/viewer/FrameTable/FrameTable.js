@@ -1,8 +1,8 @@
 import React from 'react';
-import {grep, TimeStamp} from "./Helper";
+import {grep, TimeStamp} from "../Helper";
 import cx from "classnames";
 import FontAwesome from "react-fontawesome";
-import './FrameList.scss';
+import './FrameTable.scss';
 
 export default class FrameList extends React.Component {
     handlerClearSelect = () => {

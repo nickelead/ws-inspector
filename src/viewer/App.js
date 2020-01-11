@@ -3,7 +3,7 @@ import Panel from 'react-flex-panel';
 import cx from 'classnames';
 import HexViewer from './PanelView/HexViewer';
 import ListControls from "./ListControls";
-import FrameList from "./FrameList";
+import FrameList from "./FrameTable/FrameTable";
 import './App.scss';
 
 import {ObjectInspector} from 'react-inspector';
