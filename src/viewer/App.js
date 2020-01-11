@@ -1,7 +1,7 @@
 import React from 'react';
 import Panel from 'react-flex-panel';
 import cx from 'classnames';
-import HexViewer from './HexViewer';
+import HexViewer from './PanelView/HexViewer';
 import ListControls from "./ListControls";
 import FrameList from "./FrameList";
 import './App.scss';
