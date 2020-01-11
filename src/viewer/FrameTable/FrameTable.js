@@ -1,5 +1,5 @@
 import React from 'react';
-import {grep, TimeStamp} from "../Helper";
+import {grep, TimeStamp} from "../Helpers/Helper";
 import cx from "classnames";
 import FontAwesome from "react-fontawesome";
 import './FrameTable.scss';
