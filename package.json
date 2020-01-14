@@ -4,7 +4,8 @@
   "description": "Chrome extension to monitor WebSocket frames",
   "scripts": {
     "build": "node scripts/build.js",
-    "start": "node scripts/webserver.js"
+    "start": "node scripts/webserver.js",
+    "es": "eslint ./src "
   },
   "devDependencies": {
     "@babel/core": "^7.7.7",
@@ -16,6 +17,10 @@
     "clean-webpack-plugin": "^0.1.17",
     "copy-webpack-plugin": "^4.6.0",
     "css-loader": "^0.25.0",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.20.0",
+    "eslint-plugin-react": "^7.17.0",
     "file-loader": "^0.11.2",
     "fs-extra": "^0.30.0",
     "html-loader": "^0.4.5",
