@@ -26,7 +26,8 @@ export default class ListControls extends React.Component {
 
     render() {
       const {
-        onClear, onCapturingToggle, regName, onRegName, isCapturing, filter, onFilter, isFilterInverse, onFilterModeToggle,
+        onClear, onCapturingToggle, regName, onRegName, isCapturing,
+        filter, onFilter, isFilterInverse, onFilterModeToggle,
       } = this.props;
       return (
             <div className="list-controls">

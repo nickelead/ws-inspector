@@ -8,11 +8,11 @@ import './App.scss';
 
 
 export default class App extends React.Component {
-    _uniqueId = 0;
+    frameUniqueId = 0;
 
-    _issueTime = null;
+    frameIssueTime = null;
 
-    _issueWallTime = null;
+    frameIssueWallTime = null;
 
     cacheKey = ['isCapturing', 'regName', 'filter', 'isFilterInverse'];
 
@@ -46,11 +46,11 @@ export default class App extends React.Component {
     }
 
     getTime(timestamp) {
-      if (this._issueTime == null) {
-        this._issueTime = timestamp;
-        this._issueWallTime = new Date().getTime();
+      if (this.frameIssueTime == null) {
+        this.frameIssueTime = timestamp;
+        this.frameIssueWallTime = new Date().getTime();
       }
-      return new Date((timestamp - this._issueTime) * 1000 + this._issueWallTime);
+      return new Date((timestamp - this.frameIssueTime) * 1000 + this.frameIssueWallTime);
     }
 
     render() {
@@ -121,7 +121,7 @@ export default class App extends React.Component {
         const frame = {
           type,
           name: type,
-          id: ++this._uniqueId,
+          id: ++this.frameUniqueId,
           time: this.getTime(timestamp),
           length: response.payloadData.length,
         };

@@ -19,7 +19,9 @@ export default class HexViewer extends React.Component {
         {row.map((byte, i) => <span key={i}>{byte.toString(16).padStart(2, '0')}</span>)}
         {row.length < 16 && [...Array(16 - row.length)].map((nil, i) => <span key={i} className="padding">{'  '}</span>)}
       </li>);
-      asciiView.push(<li key={pos}>{String.fromCharCode(...row.map((byte) => (byte >= 32 && byte <= 126 ? byte : dot)))}</li>);
+      asciiView.push(<li key={pos}>(
+        {String.fromCharCode(...row.map((byte) => (byte >= 32 && byte <= 126 ? byte : dot)))}
+      )</li>);
     }
     return (
       <div className={classNames(className, 'HexViewer')} {...props}>

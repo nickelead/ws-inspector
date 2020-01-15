@@ -1,3 +1,4 @@
+/* eslint max-classes-per-file: 0 */
 import React from 'react';
 import cx from 'classnames';
 import FontAwesome from 'react-fontawesome';

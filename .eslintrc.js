@@ -33,6 +33,7 @@ module.exports = {
   rules: {
     "react-hooks/rules-of-hooks": "error", // to make 'react-hooks' work
     "react-hooks/exhaustive-deps": "warn", // to make 'react-hooks' work
+    "react/prop-types": 0, // prop-types rule
 
   },
   settings: {

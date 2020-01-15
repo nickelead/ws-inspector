@@ -23,7 +23,8 @@ export default class FrameView extends React.Component {
       }
 
       if (frame.text != null) {
-        if (!frame.hasOwnProperty('json')) {
+        const hasJSONProperty = Object.prototype.hasOwnProperty.call(frame, 'json');
+        if (!hasJSONProperty) {
           try {
             frame.json = JSON.parse(frame.text);
           } catch {
