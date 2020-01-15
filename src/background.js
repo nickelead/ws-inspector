@@ -38,11 +38,17 @@ chrome.browserAction.onClicked.addListener((tab) => {
         });
         chrome.windows.update(inspector.popup.id, { focused: true });
       } else {
-        chrome.windows.create({
-          url: `inspector.html?${tab.id}`, type: 'popup', width: 800, height: 600,
-        }, (wnd) => {
-          inspectors.push({ id: tab.id, popup: wnd, active: true });
-        });
+        chrome.windows.create(
+          {
+            url: `inspector.html?${tab.id}`,
+            type: 'popup',
+            width: 800,
+            height: 600,
+          },
+          (wnd) => {
+            inspectors.push({ id: tab.id, popup: wnd, active: true });
+          }
+        );
       }
     });
   }

@@ -1,4 +1,3 @@
-
 export function grep(text, regexp) {
   if (!(text && regexp)) {
     return;
@@ -11,8 +10,7 @@ export function grep(text, regexp) {
     if (firstMach) {
       return firstMach;
     }
-  } catch (e) {
-  }
+  } catch (e) {}
 }
 const padded = (num, d) => num.toFixed(0).padStart(d, '0');
 
@@ -21,11 +19,7 @@ export const TimeStamp = (time) => {
   const m = time.getMinutes();
   const s = time.getSeconds();
   const ms = time.getMilliseconds();
-  return (
-
-    (`${padded(h, 2)}:${padded(m, 2)}:${padded(s, 2)}.${padded(ms, 3)}`)
-
-  );
+  return `${padded(h, 2)}:${padded(m, 2)}:${padded(s, 2)}.${padded(ms, 3)}`;
 };
 
 export const stringToBuffer = (str) => {

@@ -10,6 +10,8 @@ module.exports = {
     "plugin:react/recommended",
     "plugin:import/errors",
     "plugin:import/warnings",
+    "plugin:prettier/recommended",
+    "prettier/react",
   ],
   globals: {
     Atomics: 'readonly',
@@ -28,7 +30,7 @@ module.exports = {
     "react",
     "import",
     "react-hooks",
-
+    "prettier",
   ],
   rules: {
     "react-hooks/rules-of-hooks": "error", // to make 'react-hooks' work

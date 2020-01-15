@@ -45,4 +45,4 @@ window.addEventListener('load', () => {
   startDebugging();
 });
 
-ReactDOM.render(<App handlers={handlers}/>, document.getElementById('root'));
+ReactDOM.render(<App handlers={handlers} />, document.getElementById('root'));
