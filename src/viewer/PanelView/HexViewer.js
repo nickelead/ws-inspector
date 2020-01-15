@@ -6,6 +6,7 @@ export default class HexViewer extends React.Component {
   render() {
     const { data, className, ...props } = this.props;
     let numDigits = 4;
+    /* eslint-disable-next-line no-bitwise */
     while (1 << (numDigits * 4) <= data.length) {
       numDigits += 1;
     }

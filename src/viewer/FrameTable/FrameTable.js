@@ -52,6 +52,7 @@ class FrameEntry extends React.PureComponent {
       }
       return !grep(frame.text, filter);
     }
+    return false;
   }
 
   render() {
