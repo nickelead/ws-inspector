@@ -8,25 +8,25 @@ const tabId = parseInt(window.location.search.substr(1));
 const handlers = {};
 
 function startDebugging() {
-  chrome.debugger.sendCommand({tabId}, "Network.enable", null, () => {
+  chrome.debugger.sendCommand({ tabId }, 'Network.enable', null, () => {
     if (chrome.runtime.lastError) {
       console.error(chrome.runtime.lastError.message);
     } else {
-      console.log("Network enabled");
+      console.log('Network enabled');
     }
   });
 
-  chrome.tabs.get(tabId, tab => {
+  chrome.tabs.get(tabId, (tab) => {
     if (tab.title) {
-      document.title = "WebSocket Inspector - " + tab.title;
+      document.title = `WebSocket Inspector - ${tab.title}`;
     } else {
-      document.title = "WebSocket Inspector";
+      document.title = 'WebSocket Inspector';
     }
   });
 }
 
-chrome.runtime.onMessage.addListener(message => {
-  if (message.message === "reattach" && message.tabId === tabId) {
+chrome.runtime.onMessage.addListener((message) => {
+  if (message.message === 'reattach' && message.tabId === tabId) {
     startDebugging();
   }
 });
@@ -41,7 +41,7 @@ chrome.debugger.onEvent.addListener((debuggee, message, params) => {
   }
 });
 
-window.addEventListener("load", function() {
+window.addEventListener('load', () => {
   startDebugging();
 });
 

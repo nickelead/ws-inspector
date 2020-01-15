@@ -1,40 +1,42 @@
 import React from 'react';
 import FontAwesome from 'react-fontawesome';
-import cx from "classnames";
+import cx from 'classnames';
 import './ListControls.scss';
 
 export default class ListControls extends React.Component {
     state = {
-        openInput: null,// 'filter' | 'name'
+      openInput: null, // 'filter' | 'name'
     };
 
     openNameReg = () => {
-        if (this.state.openInput === 'name') {
-            this.setState({openInput: null});
-        } else {
-            this.setState({openInput: 'name'});
-        }
+      if (this.state.openInput === 'name') {
+        this.setState({ openInput: null });
+      } else {
+        this.setState({ openInput: 'name' });
+      }
     };
 
     openFilter = () => {
-        if (this.state.openInput === 'filter') {
-            this.setState({openInput: null});
-        } else {
-            this.setState({openInput: 'filter'});
-        }
+      if (this.state.openInput === 'filter') {
+        this.setState({ openInput: null });
+      } else {
+        this.setState({ openInput: 'filter' });
+      }
     };
 
     render() {
-        const {onClear, onCapturingToggle, regName, onRegName, isCapturing, filter, onFilter, isFilterInverse, onFilterModeToggle} = this.props;
-        return (
+      const {
+        onClear, onCapturingToggle, regName, onRegName, isCapturing, filter, onFilter, isFilterInverse, onFilterModeToggle,
+      } = this.props;
+      return (
             <div className="list-controls">
-                <span className={isCapturing ? "list-button record active" : "list-button record"} onClick={onCapturingToggle} title={isCapturing ? "Stop" : "Start"}/>
+                <span className={isCapturing ? 'list-button record active' : 'list-button record'} onClick={onCapturingToggle} title={isCapturing ? 'Stop' : 'Start'}/>
                 <FontAwesome className="list-button" name="ban" onClick={onClear} title="Clear"/>
                 <span className={'separator'}/>
                 {/* name */}
                 <FontAwesome
                     className={cx('list-button', {
-                        active: !!regName
+                      active: !!regName,
                     })}
                     name="file-signature"
                     onClick={this.openNameReg}
@@ -42,7 +44,7 @@ export default class ListControls extends React.Component {
                 />
                 <div
                     className={cx('input-wrap', {
-                        hide: this.state.openInput !== 'name'
+                      hide: this.state.openInput !== 'name',
                     })}
                 >
                     <input
@@ -57,7 +59,7 @@ export default class ListControls extends React.Component {
                 {/* filter */}
                 <FontAwesome
                     className={cx('list-button', {
-                        active: !!filter
+                      active: !!filter,
                     })}
                     name="filter"
                     onClick={this.openFilter}
@@ -67,7 +69,7 @@ export default class ListControls extends React.Component {
 
                 <div
                     className={cx('input-wrap', {
-                        hide: this.state.openInput !== 'filter'
+                      hide: this.state.openInput !== 'filter',
                     })}
                 >
                     <input
@@ -79,11 +81,11 @@ export default class ListControls extends React.Component {
 
                     />
                     <FontAwesome className="list-button" onClick={onFilterModeToggle}
-                                 name={ isFilterInverse ? "check-square" : "square"}/>
+                                 name={ isFilterInverse ? 'check-square' : 'square'}/>
                     invert
 
                 </div>
             </div>
-        );
+      );
     }
 }
