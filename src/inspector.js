@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './reset.css';
 import App from './viewer/App';
 
-const tabId = parseInt(window.location.search.substr(1));
+const tabId = parseInt(window.location.search.substr(1), 10);
 
 const handlers = {};
 

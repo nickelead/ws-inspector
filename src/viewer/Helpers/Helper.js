@@ -1,16 +1,18 @@
 export function grep(text, regexp) {
   if (!(text && regexp)) {
-    return;
+    return '';
   }
   try {
     let matchAll = text.matchAll(regexp);
 
     matchAll = Array.from(matchAll);
     const firstMach = matchAll[0][1] || matchAll[0][0];
-    if (firstMach) {
-      return firstMach;
+    if (!firstMach) {
+      return '';
     }
+    return firstMach;
   } catch (e) {}
+  return '';
 }
 const padded = (num, d) => num.toFixed(0).padStart(d, '0');
 
@@ -24,7 +26,7 @@ export const TimeStamp = (time) => {
 
 export const stringToBuffer = (str) => {
   const ui8 = new Uint8Array(str.length);
-  for (let i = 0; i < str.length; ++i) {
+  for (let i = 0; i < str.length; i += 1) {
     ui8[i] = str.charCodeAt(i);
   }
   return ui8;

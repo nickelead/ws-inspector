@@ -29,14 +29,14 @@ chrome.browserAction.onClicked.addListener((tab) => {
         return;
       }
 
-      const inspector = inspectors.find(({ id }) => id === tab.id);
-      if (inspector) {
-        inspector.active = true;
+      const inspectorLocal = inspectors.find(({ id }) => id === tab.id);
+      if (inspectorLocal) {
+        inspectorLocal.active = true;
         chrome.runtime.sendMessage({
           message: 'reattach',
           tabId: tab.id,
         });
-        chrome.windows.update(inspector.popup.id, { focused: true });
+        chrome.windows.update(inspectorLocal.popup.id, { focused: true });
       } else {
         chrome.windows.create(
           {

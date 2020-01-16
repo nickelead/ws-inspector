@@ -17,8 +17,8 @@ export default class App extends React.Component {
 
   constructor(props) {
     super(props);
-    props.handlers['Network.webSocketFrameReceived'] = this.webSocketFrameReceived.bind(this);
-    props.handlers['Network.webSocketFrameSent'] = this.webSocketFrameSent.bind(this);
+    this.props.handlers['Network.webSocketFrameReceived'] = this.webSocketFrameReceived.bind(this);
+    this.props.handlers['Network.webSocketFrameSent'] = this.webSocketFrameSent.bind(this);
     this.state = {
       frames: [],
       activeId: null,
@@ -123,10 +123,11 @@ export default class App extends React.Component {
       const frame = {
         type,
         name: type,
-        id: ++this.frameUniqueId,
+        id: this.frameUniqueId,
         time: this.getTime(timestamp),
         length: response.payloadData.length,
       };
+      this.frameUniqueId += 1;
       if (response.opcode === 1) {
         frame.text = response.payloadData;
       } else {
