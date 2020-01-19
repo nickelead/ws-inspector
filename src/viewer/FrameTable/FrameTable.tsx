@@ -4,8 +4,9 @@ import cx from 'classnames';
 import FontAwesome from 'react-fontawesome';
 import { grep, TimeStamp } from '../Helpers/Helper';
 import './FrameTable.scss';
-
-export default class FrameList extends React.Component {
+import { IFrame } from '../types';
+type FrameListProps = { frames: IFrame[]; activeId; onSelect; regName; filter; isFilterInverse };
+export default class FrameList extends React.Component<FrameListProps> {
   handlerClearSelect = () => {
     this.props.onSelect(null);
   };

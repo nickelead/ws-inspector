@@ -12,13 +12,14 @@ module.exports = {
     "plugin:import/warnings",
     "plugin:prettier/recommended",
     "prettier/react",
+    "plugin:@typescript-eslint/recommended",
   ],
   globals: {
     Atomics: 'readonly',
     SharedArrayBuffer: 'readonly',
   },
   ignorePatterns: ["node_modules/"],
-  parser: "babel-eslint",
+  parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaFeatures: {
       jsx: true,
