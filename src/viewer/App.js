@@ -1,6 +1,6 @@
 import React from 'react';
 import Panel from 'react-flex-panel';
-import ListControls from './ListControls/ListControls';
+import ControlPanel from './ControlPanel/ControlPanel';
 import FrameList from './FrameTable/FrameTable';
 import FrameView from './PanelView/PanelView';
 import { stringToBuffer } from './Helpers/Helper';
@@ -63,7 +63,7 @@ export default class App extends React.Component {
     return (
       <Panel cols className="App">
         <Panel size={330} minSize={180} resizable className="LeftPanel">
-          <ListControls
+          <ControlPanel
             onClear={this.clearFrames}
             onCapturingToggle={this.onCapturingToggle}
             isCapturing={isCapturing}

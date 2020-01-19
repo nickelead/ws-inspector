@@ -1,12 +1,28 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import FontAwesome from 'react-fontawesome';
 import cx from 'classnames';
-import './ListControls.scss';
+import './ControlPanel.scss';
+import { EFilter } from '../types';
 
-export default class ListControls extends React.Component {
-  state = {
-    openInput: null, // 'filter' | 'name'
-  };
+type ControlPanelProps = {
+  isCapturing: boolean;
+  onClear: { (event: MouseEvent): void };
+  onFilterModeToggle: { (event: MouseEvent): void };
+  onCapturingToggle: { (event: MouseEvent): void };
+  onRegName: { (event: ChangeEvent): void };
+  onFilter: { (event: ChangeEvent): void };
+};
+interface EProps extends ControlPanelProps, EFilter {}
+interface EState {
+  openInput?: null | 'filter' | 'name';
+}
+export default class ControlPanel extends React.Component<EProps, EState> {
+  constructor(props: EProps) {
+    super(props);
+    this.state = {
+      openInput: null, // 'filter' | 'name'
+    };
+  }
 
   openNameReg = () => {
     if (this.state.openInput === 'name') {

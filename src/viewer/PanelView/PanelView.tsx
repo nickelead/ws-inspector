@@ -12,6 +12,7 @@ const JsonViewer = ({ data }) => (
   </div>
 );
 
+
 export default class FrameView extends React.Component {
   state = { panel: null };
 
