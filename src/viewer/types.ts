@@ -1,4 +1,4 @@
-type IFrameType = 'incoming' | 'outgoing';
+export type IFrameType = 'incoming' | 'outgoing';
 export type IFrame = {
   type: IFrameType;
   name: string;
@@ -6,11 +6,16 @@ export type IFrame = {
   time: Date;
   length: number;
   text?: string;
-  binary?: Uint8Array; //TODO string to buffer type
+  binary?: Uint8Array;
+  json?: object;
 };
 
 export interface EFilter {
   regName: string;
-  filter: ;
+  filter: string;
   isFilterInverse: boolean;
+}
+export interface Response {
+  opcode: number;
+  payloadData: string;
 }

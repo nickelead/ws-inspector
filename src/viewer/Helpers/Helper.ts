@@ -32,7 +32,7 @@ export const getName = (frame: IFrame, filterData: EFilter): string => {
 };
 
 export const checkViable = (frame: IFrame, filterData: EFilter): boolean => {
-  if (filterData.filter) {
+  if (filterData.filter && frame.text) {
     if (filterData.isFilterInverse) {
       return !!grep(frame.text, filterData.filter);
     }

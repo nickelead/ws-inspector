@@ -1,23 +1,15 @@
 /* eslint max-classes-per-file: 0 */
-import React from 'react';
+import React, { MouseEvent } from 'react';
 import cx from 'classnames';
 import FontAwesome from 'react-fontawesome';
 import { checkViable, getName, TimeStamp } from '../Helpers/Helper';
 import './FrameTable.scss';
 import { EFilter, IFrame } from '../types';
 
-class Filter implements EFilter {
-  public regName: RegExp;
-  public filter: RegExp;
-  public isFilterInverse: boolean;
-}
-type FrameListProps = { frames: IFrame[]; activeId: number; onSelect: any };
-type FrameEntryProps = {
-  key: number;
-  frame: IFrame;
-  selected: boolean;
-  onSelect: void;
-  filterData: EFilter;
+type FrameListProps = {
+  frames: IFrame[];
+  activeId: number | null;
+  onSelect: (id: number | null) => void;
 };
 
 export default class FrameList extends React.Component<FrameListProps & EFilter> {
@@ -43,11 +35,20 @@ export default class FrameList extends React.Component<FrameListProps & EFilter>
   }
 }
 
+type FrameEntryProps = {
+  key: number;
+  frame: IFrame;
+  selected: boolean;
+  onSelect: (id: number | null) => void;
+  filterData: EFilter;
+};
+
 class FrameEntry extends React.PureComponent<FrameEntryProps> {
-  handlerSelect = (e) => {
+  handlerSelect = (e: MouseEvent) => {
     e.stopPropagation();
     this.props.onSelect(this.props.frame.id);
   };
+
   render() {
     const { frame, selected, filterData } = this.props;
     if (checkViable(frame, filterData as EFilter)) return null;

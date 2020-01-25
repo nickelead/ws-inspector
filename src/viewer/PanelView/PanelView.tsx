@@ -1,22 +1,31 @@
-import { ObjectInspector } from 'react-inspector';
+import { ObjectInspector, ObjectInspectorProps } from 'react-inspector';
 import React from 'react';
 import cx from 'classnames';
 import HexViewer from './HexViewer';
 import './PanelView.scss';
+import { IFrame } from '../types';
 
-const TextViewer = ({ data }) => <div className="TextViewer tab-pane">{data}</div>;
-
-const JsonViewer = ({ data }) => (
-  <div className="JsonViewer tab-pane">
-    <ObjectInspector data={data} expandLevel={1} />
-  </div>
+const TextViewer = ({ data }: { data: string | undefined }) => (
+  <div className="TextViewer tab-pane">{data}</div>
 );
 
+const JsonViewer = (data: ObjectInspectorProps) => (
+  <div className="JsonViewer tab-pane">
+    <ObjectInspector data={data} expandLevel={2} />
+  </div>
+);
+type PanelName = 'json' | 'hex' | 'text';
+interface PanelViewState {
+  panel?: PanelName | PanelName[] | null;
+}
+interface PanelViewProps {
+  frame: IFrame;
+}
 
-export default class FrameView extends React.Component {
+export default class PanelView extends React.Component<PanelViewProps, PanelViewState> {
   state = { panel: null };
 
-  static getDerivedStateFromProps(props, state) {
+  static getDerivedStateFromProps(props: PanelViewProps, state: PanelViewState) {
     const { frame } = props;
     const panels = [];
     if (frame.binary) {
@@ -39,13 +48,13 @@ export default class FrameView extends React.Component {
       panels.push('text');
     }
 
-    if (!panels.includes(state.panel)) {
+    if (!panels.includes(state.panel as string)) {
       return { panel: panels[0] };
     }
     return null;
   }
 
-  makePanel(name, title) {
+  makePanel(name: PanelName, title: string) {
     return (
       <li
         className={cx('tab-button', { active: this.state.panel === name })}
@@ -68,7 +77,7 @@ export default class FrameView extends React.Component {
         </ul>
         {panel === 'text' && <TextViewer data={frame.text} />}
         {panel === 'json' && <JsonViewer data={frame.json} />}
-        {panel === 'hex' && <HexViewer className="tab-pane" data={frame.binary} />}
+        {panel === 'hex' && <HexViewer className="tab-pane" data={frame.binary as Uint8Array} />}
       </div>
     );
   }

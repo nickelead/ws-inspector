@@ -2,7 +2,11 @@ import React from 'react';
 import classNames from 'classnames';
 import './HexViewer.scss';
 
-export default function HexViewer(props) {
+interface HexViewerProps {
+  className: string;
+  data: Uint8Array;
+}
+export default function HexViewer(props: HexViewerProps) {
   const { data, className } = props;
   let numDigits = 4;
   /* eslint-disable-next-line no-bitwise */

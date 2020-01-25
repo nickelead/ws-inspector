@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "lib": ["es2018", "es2020.string"],
-    "strictNullChecks": false, // TODO change before release
+    "lib": ["es2018", "es2020.string", "DOM"],
+    "strictNullChecks": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "module": "ESNext",

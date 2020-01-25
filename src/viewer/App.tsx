@@ -1,21 +1,34 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import Panel from 'react-flex-panel';
 import ControlPanel from './ControlPanel/ControlPanel';
 import FrameList from './FrameTable/FrameTable';
-import FrameView from './PanelView/PanelView';
+import PanelView from './PanelView/PanelView';
 import { stringToBuffer } from './Helpers/Helper';
 import './App.scss';
+import { IFrame, IFrameType, Response } from './types';
 
-export default class App extends React.Component {
+interface AppProps {
+  handlers: any;
+}
+interface AppState {
+  [key: string]: any;
+  frames: IFrame[];
+  activeId: number | null;
+  isCapturing: boolean;
+  regName: string;
+  filter: string;
+  isFilterInverse: boolean;
+}
+export default class App extends React.Component<AppProps, AppState> {
   frameUniqueId = 0;
 
-  frameIssueTime = null;
+  frameIssueTime: number;
 
-  frameIssueWallTime = null;
+  frameIssueWallTime: number;
 
   cacheKey = ['isCapturing', 'regName', 'filter', 'isFilterInverse'];
 
-  constructor(props) {
+  constructor(props: AppProps) {
     super(props);
     this.props.handlers['Network.webSocketFrameReceived'] = this.webSocketFrameReceived.bind(this);
     this.props.handlers['Network.webSocketFrameSent'] = this.webSocketFrameSent.bind(this);
@@ -30,10 +43,16 @@ export default class App extends React.Component {
   }
 
   componentDidMount() {
-    const cacheState = this.cacheKey.reduce((acc, key) => {
-      const value = localStorage.getItem(key);
+    const cacheState = this.cacheKey.reduce<Record<string, string | boolean>>((acc, key) => {
+      const value = window.localStorage.getItem(key);
       if (value !== null && value !== undefined) {
         acc[key] = value;
+        if (value === 'true') {
+          acc[key] = true;
+        }
+        if (value === 'false') {
+          acc[key] = false;
+        }
       }
       return acc;
     }, {});
@@ -41,7 +60,7 @@ export default class App extends React.Component {
     // TODO Boolean values turns to strings.
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps: AppProps, prevState: AppState) {
     this.cacheKey.forEach((key) => {
       if (prevState[key] !== this.state[key]) {
         localStorage.setItem(key, this.state[key]);
@@ -49,7 +68,7 @@ export default class App extends React.Component {
     });
   }
 
-  getTime(timestamp) {
+  getTime(timestamp: number) {
     if (this.frameIssueTime == null) {
       this.frameIssueTime = timestamp;
       this.frameIssueWallTime = new Date().getTime();
@@ -85,7 +104,7 @@ export default class App extends React.Component {
         </Panel>
         <Panel minSize={100} className="PanelView">
           {active != null ? (
-            <FrameView frame={active} />
+            <PanelView frame={active} />
           ) : (
             <span className="message">Select a frame to view its contents</span>
           )}
@@ -94,7 +113,7 @@ export default class App extends React.Component {
     );
   }
 
-  selectFrame = (id) => {
+  selectFrame = (id: number) => {
     this.setState({ activeId: id });
   };
 
@@ -106,11 +125,11 @@ export default class App extends React.Component {
     this.setState({ isCapturing: !this.state.isCapturing });
   };
 
-  setRegName = (e) => {
+  setRegName = (e: ChangeEvent<HTMLInputElement>) => {
     this.setState({ regName: e.target.value });
   };
 
-  setFilter = (e) => {
+  setFilter = (e: ChangeEvent<HTMLInputElement>) => {
     this.setState({ filter: e.target.value });
   };
 
@@ -118,9 +137,9 @@ export default class App extends React.Component {
     this.setState({ isFilterInverse: !this.state.isFilterInverse });
   };
 
-  addFrame(type, timestamp, response) {
+  addFrame(type: IFrameType, timestamp: number, response: Response) {
     if (response.opcode === 1 || response.opcode === 2) {
-      const frame = {
+      const frame: IFrame = {
         type,
         name: type,
         id: this.frameUniqueId,
@@ -137,16 +156,14 @@ export default class App extends React.Component {
     }
   }
 
-  webSocketFrameReceived({ timestamp, response }) {
-    if (this.state.isCapturing === true || this.state.isCapturing === 'true') {
-      // see componentDidMount()
+  webSocketFrameReceived({ timestamp, response }: { timestamp: number; response: Response }) {
+    if (this.state.isCapturing) {
       this.addFrame('incoming', timestamp, response);
     }
   }
 
-  webSocketFrameSent({ timestamp, response }) {
-    if (this.state.isCapturing === true || this.state.isCapturing === 'true') {
-      // see componentDidMount()
+  webSocketFrameSent({ timestamp, response }: { timestamp: number; response: Response }) {
+    if (this.state.isCapturing) {
       this.addFrame('outgoing', timestamp, response);
     }
   }

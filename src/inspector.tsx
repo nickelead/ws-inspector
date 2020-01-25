@@ -1,14 +1,15 @@
+/// <reference types="chrome"/>
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './reset.css';
 import App from './viewer/App';
 
 const tabId = parseInt(window.location.search.substr(1), 10);
-
-const handlers = {};
+// TODO create
+const handlers: any = {};
 
 function startDebugging() {
-  chrome.debugger.sendCommand({ tabId }, 'Network.enable', null, () => {
+  chrome.debugger.sendCommand({ tabId }, 'Network.enable', undefined, () => {
     if (chrome.runtime.lastError) {
       console.error(chrome.runtime.lastError.message);
     } else {

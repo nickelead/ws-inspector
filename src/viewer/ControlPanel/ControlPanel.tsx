@@ -1,23 +1,24 @@
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, MouseEvent } from 'react';
 import FontAwesome from 'react-fontawesome';
 import cx from 'classnames';
 import './ControlPanel.scss';
 import { EFilter } from '../types';
-
-type ControlPanelProps = {
+// TODO not to return events
+type ControlPanelMode = {
   isCapturing: boolean;
-  onClear: { (event: MouseEvent): void };
-  onFilterModeToggle: { (event: MouseEvent): void };
-  onCapturingToggle: { (event: MouseEvent): void };
-  onRegName: { (event: ChangeEvent): void };
-  onFilter: { (event: ChangeEvent): void };
+  onClear: (event: MouseEvent) => void;
+  onFilterModeToggle: (event: MouseEvent) => void;
+  onCapturingToggle: (event: MouseEvent) => void;
+  onRegName: (event: ChangeEvent) => void;
+  onFilter: (event: ChangeEvent) => void;
 };
-interface EProps extends ControlPanelProps, EFilter {}
-interface EState {
+interface ControlPanelProps extends ControlPanelMode, EFilter {}
+interface ControlPanelState {
   openInput?: null | 'filter' | 'name';
 }
-export default class ControlPanel extends React.Component<EProps, EState> {
-  constructor(props: EProps) {
+
+export default class ControlPanel extends React.Component<ControlPanelProps, ControlPanelState> {
+  constructor(props: ControlPanelProps) {
     super(props);
     this.state = {
       openInput: null, // 'filter' | 'name'

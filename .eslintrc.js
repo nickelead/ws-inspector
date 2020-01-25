@@ -12,6 +12,7 @@ module.exports = {
     "plugin:import/warnings",
     "plugin:prettier/recommended",
     "prettier/react",
+    "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
   ],
   globals: {
@@ -21,6 +22,8 @@ module.exports = {
   ignorePatterns: ["node_modules/"],
   parser: '@typescript-eslint/parser',
   parserOptions: {
+    project: "tsconfig.json",
+    tsconfigRootDir: ".",
     ecmaFeatures: {
       jsx: true,
     },
