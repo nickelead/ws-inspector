@@ -1,26 +1,28 @@
-import React, { ChangeEvent } from 'react';
+import React from 'react';
 import Panel from 'react-flex-panel';
 import ControlPanel from './ControlPanel/ControlPanel';
 import FrameList from './FrameTable/FrameTable';
 import PanelView from './PanelView/PanelView';
 import { stringToBuffer } from './Helpers/Helper';
 import './App.scss';
-import { IFrame, IFrameType, Response } from './types';
+import { FrameEntryType, frameSendingType, WebSocketFrame } from './types';
+import { FrameEntry } from '../FrameData';
 
 interface AppProps {
   handlers: any;
+  frameViewArray: FrameEntry[];
 }
 interface AppState {
   [key: string]: any;
-  frames: IFrame[];
-  activeId: number | null;
+  frameViewArray: FrameEntry[];
+  activeId: string | null;
   isCapturing: boolean;
   regName: string;
   filter: string;
   isFilterInverse: boolean;
 }
 export default class App extends React.Component<AppProps, AppState> {
-  frameUniqueId = 0;
+  //  frameUniqueId = 0;
 
   frameIssueTime: number;
 
@@ -30,11 +32,11 @@ export default class App extends React.Component<AppProps, AppState> {
 
   constructor(props: AppProps) {
     super(props);
-    this.props.handlers['Network.webSocketFrameReceived'] = this.webSocketFrameReceived.bind(this);
-    this.props.handlers['Network.webSocketFrameSent'] = this.webSocketFrameSent.bind(this);
+    //    this.props.handlers['Network.webSocketFrameReceived'] = this.webSocketFrameReceived.bind(this);
+    //    this.props.handlers['Network.webSocketFrameSent'] = this.webSocketFrameSent.bind(this);
     this.state = {
-      frames: [],
-      activeId: null,
+      frameViewArray: props.frameViewArray,
+      activeId: '',
       isCapturing: true,
       regName: '',
       filter: '',
@@ -57,7 +59,6 @@ export default class App extends React.Component<AppProps, AppState> {
       return acc;
     }, {});
     this.setState(cacheState);
-    // TODO Boolean values turns to strings.
   }
 
   componentDidUpdate(prevProps: AppProps, prevState: AppState) {
@@ -77,8 +78,8 @@ export default class App extends React.Component<AppProps, AppState> {
   }
 
   render() {
-    const { frames, activeId, regName, filter, isFilterInverse, isCapturing } = this.state;
-    const active = frames.find((f) => f.id === activeId);
+    const { frameViewArray, activeId, regName, filter, isFilterInverse, isCapturing } = this.state;
+    const active = frameViewArray.find((frameEntry) => frameEntry.id === activeId);
     return (
       <Panel cols className="App">
         <Panel size={330} minSize={180} resizable className="LeftPanel">
@@ -87,19 +88,16 @@ export default class App extends React.Component<AppProps, AppState> {
             onCapturingToggle={this.onCapturingToggle}
             isCapturing={isCapturing}
             regName={regName}
-            onRegName={this.setRegName}
+            handleRegName={this.setRegName}
             filter={filter}
-            onFilter={this.setFilter}
-            isFilterInverse={this.state.isFilterInverse}
+            handleFilter={this.setFilter}
+            isFilterInverse={isFilterInverse}
             onFilterModeToggle={this.onFilterModeToggle}
           />
           <FrameList
-            frames={frames}
+            frameViewArray={frameViewArray}
             activeId={activeId}
             onSelect={this.selectFrame}
-            regName={regName}
-            filter={filter}
-            isFilterInverse={isFilterInverse}
           />
         </Panel>
         <Panel minSize={100} className="PanelView">
@@ -113,7 +111,7 @@ export default class App extends React.Component<AppProps, AppState> {
     );
   }
 
-  selectFrame = (id: number) => {
+  selectFrame = (id: string) => {
     this.setState({ activeId: id });
   };
 
@@ -125,23 +123,23 @@ export default class App extends React.Component<AppProps, AppState> {
     this.setState({ isCapturing: !this.state.isCapturing });
   };
 
-  setRegName = (e: ChangeEvent<HTMLInputElement>) => {
-    this.setState({ regName: e.target.value });
+  setRegName = (regName: string) => {
+    this.setState({ regName });
   };
 
-  setFilter = (e: ChangeEvent<HTMLInputElement>) => {
-    this.setState({ filter: e.target.value });
+  setFilter = (filter: string) => {
+    this.setState({ filter });
   };
 
   onFilterModeToggle = () => {
     this.setState({ isFilterInverse: !this.state.isFilterInverse });
   };
 
-  addFrame(type: IFrameType, timestamp: number, response: Response) {
-    if (response.opcode === 1 || response.opcode === 2) {
-      const frame: IFrame = {
-        type,
-        name: type,
+  /*  addFrame(sendingType: frameSendingType, timestamp: number, response: WebSocketFrame) {
+    if ((response.opcode === 1 || response.opcode === 2) && this.state.isCapturing) {
+      const frame: FrameEntryType = {
+        sendingType: sendingType,
+        name: sendingType,
         id: this.frameUniqueId,
         time: this.getTime(timestamp),
         length: response.payloadData.length,
@@ -156,15 +154,15 @@ export default class App extends React.Component<AppProps, AppState> {
     }
   }
 
-  webSocketFrameReceived({ timestamp, response }: { timestamp: number; response: Response }) {
+  webSocketFrameReceived({ timestamp, response }: { timestamp: number; response: WebSocketFrame }) {
     if (this.state.isCapturing) {
       this.addFrame('incoming', timestamp, response);
     }
   }
 
-  webSocketFrameSent({ timestamp, response }: { timestamp: number; response: Response }) {
+  webSocketFrameSent({ timestamp, response }: { timestamp: number; response: WebSocketFrame }) {
     if (this.state.isCapturing) {
       this.addFrame('outgoing', timestamp, response);
     }
-  }
+  }*/
 }

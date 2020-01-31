@@ -1,4 +1,5 @@
-import { EFilter, IFrame } from '../types';
+import { EFilter, FrameEntryType } from '../types';
+import { FrameEntry } from '../../FrameData';
 
 export function grep(text: string, regexp: string) {
   if (!(text && regexp)) {
@@ -24,14 +25,20 @@ export const TimeStamp = (time: Date): string => {
   const ms = time.getMilliseconds();
   return `${padded(h, 2)}:${padded(m, 2)}:${padded(s, 2)}.${padded(ms, 3)}`;
 };
-export const getName = (frame: IFrame, filterData: EFilter): string => {
+export const getName = (frame: FrameEntryType, filterData: EFilter): string => {
   if (frame.text != null) {
     return grep(frame.text, filterData.regName) || frame.text;
   }
   return 'Binary Frame';
 };
 
-export const checkViable = (frame: IFrame, filterData: EFilter): boolean => {
+export const newGetName = (frame: FrameEntry, filterData: EFilter): string => {
+  if (frame.contentType !== 'binary') {
+    return grep(frame.text, filterData.regName) || frame.text;
+  }
+  return 'Binary Frame';
+};
+export const checkViable = (frame: FrameEntryType, filterData: EFilter): boolean => {
   if (filterData.filter && frame.text) {
     if (filterData.isFilterInverse) {
       return !!grep(frame.text, filterData.filter);

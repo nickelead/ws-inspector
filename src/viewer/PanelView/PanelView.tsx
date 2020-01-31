@@ -3,7 +3,7 @@ import React from 'react';
 import cx from 'classnames';
 import HexViewer from './HexViewer';
 import './PanelView.scss';
-import { IFrame } from '../types';
+import { FrameEntryType } from '../types';
 
 const TextViewer = ({ data }: { data: string | undefined }) => (
   <div className="TextViewer tab-pane">{data}</div>
@@ -19,7 +19,7 @@ interface PanelViewState {
   panel?: PanelName | PanelName[] | null;
 }
 interface PanelViewProps {
-  frame: IFrame;
+  frame: FrameEntryType;
 }
 
 export default class PanelView extends React.Component<PanelViewProps, PanelViewState> {

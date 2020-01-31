@@ -3,14 +3,14 @@ import FontAwesome from 'react-fontawesome';
 import cx from 'classnames';
 import './ControlPanel.scss';
 import { EFilter } from '../types';
-// TODO not to return events
+
 type ControlPanelMode = {
   isCapturing: boolean;
   onClear: (event: MouseEvent) => void;
   onFilterModeToggle: (event: MouseEvent) => void;
   onCapturingToggle: (event: MouseEvent) => void;
-  onRegName: (event: ChangeEvent) => void;
-  onFilter: (event: ChangeEvent) => void;
+  handleRegName: (arg0: string) => void;
+  handleFilter: (arg0: string) => void;
 };
 interface ControlPanelProps extends ControlPanelMode, EFilter {}
 interface ControlPanelState {
@@ -46,13 +46,22 @@ export default class ControlPanel extends React.Component<ControlPanelProps, Con
       onClear,
       onCapturingToggle,
       regName,
-      onRegName,
+      handleRegName,
       isCapturing,
       filter,
-      onFilter,
+      handleFilter,
       isFilterInverse,
       onFilterModeToggle,
     } = this.props;
+
+    const onRegName = (e: ChangeEvent<HTMLInputElement>) => {
+      handleRegName(e.target.value);
+    };
+
+    const onFilter = (e: ChangeEvent<HTMLInputElement>) => {
+      handleFilter(e.target.value);
+    };
+
     return (
       <div className="list-controls">
         <span

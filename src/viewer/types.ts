@@ -1,6 +1,6 @@
-export type IFrameType = 'incoming' | 'outgoing';
-export type IFrame = {
-  type: IFrameType;
+export type frameSendingType = 'incoming' | 'outgoing';
+export interface FrameEntryType {
+  sendingType: frameSendingType;
   name: string;
   id: number;
   time: Date;
@@ -15,7 +15,15 @@ export interface EFilter {
   filter: string;
   isFilterInverse: boolean;
 }
-export interface Response {
+
+export interface WebSocketFrame {
   opcode: number;
+  mask: boolean;
   payloadData: string;
+}
+
+export interface NetworkWebSocketParams {
+  requestId: string;
+  timestamp: number;
+  response: WebSocketFrame;
 }

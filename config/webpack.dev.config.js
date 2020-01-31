@@ -14,7 +14,7 @@ var srcDir = path.join(appDir, 'src');
 
 var options = {
   entry: {
-    background: path.join(srcDir, 'background.js'),
+    background: path.join(srcDir, 'background.ts'),
     inspector: path.join(srcDir, 'inspector.tsx'),
   },
   output: {
