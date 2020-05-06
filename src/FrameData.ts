@@ -1,15 +1,13 @@
-import { FrameEntryType, WebSocketFrame } from './viewer/types';
-import { checkViable, newGetName, stringToBuffer } from './viewer/Helpers/Helper';
+  /*import { FrameEntryType, WebSocketFrame } from './viewer/types';
+import { checkViable, getName, stringToBuffer } from './viewer/Helpers/Helper';
 type INC = 'incoming';
 type OUT = 'outgoing';
 export type frameSendingType = INC | OUT;
-type JSON_TYPE = 'json';
-type BINARY_TYPE = 'binary';
-type TEXT_TYPE = 'text';
-const JSON_TYPE: JSON_TYPE = 'json',
-  BINARY_TYPE: BINARY_TYPE = 'binary',
-  TEXT_TYPE: TEXT_TYPE = 'text';
-type contentType = JSON_TYPE | BINARY_TYPE | TEXT_TYPE;
+enum contentType {
+  json = 'JSON',
+  binary = 'BINARY',
+  text = 'TEXT',
+}
 
 interface FrameAddingProps {
   id: string;
@@ -51,19 +49,19 @@ export const getFrame = (
   const isDataTextOrObject = response.opcode === 1;
   const isDataBinary = response.opcode === 2;
   if (isDataTextOrObject || isDataBinary) {
-    let assignedContentType: contentType, assignedContent: string | Uint8Array | object; // TODO Default value?
-
+    let assignedContentType: contentType;
+    let assignedContent: string | Uint8Array | object; // TODO Default value?
     if (isDataBinary) {
       assignedContent = stringToBuffer(response.payloadData);
-      assignedContentType = BINARY_TYPE;
+      assignedContentType = contentType.binary;
     }
     if (isDataTextOrObject) {
       try {
         assignedContent = JSON.parse(response.payloadData);
-        assignedContentType = JSON_TYPE;
+        assignedContentType = contentType.json;
       } catch {
         assignedContent = response.payloadData;
-        assignedContentType = TEXT_TYPE;
+        assignedContentType = contentType.text;
       }
     }
     // Creates a new Frame Entry
@@ -112,8 +110,8 @@ export default class FrameDataArray {
     this.frames.map((frameEntry: FrameEntry) => {
       // TODO refactor checkViable() newGetName to comply with new types
       if (!checkViable(frameEntry as FrameEntryType, { regName, filter, isFilterInverse })) {
-        const greppedText = newGetName(frameEntry, { regName, filter, isFilterInverse });
-        const processedFrameEntry = Object.assign({}, frameEntry); //copy = JSON.parse(JSON.stringify(original));
+        const greppedText = getName(frameEntry, { regName, filter, isFilterInverse });
+        const processedFrameEntry = {...frameEntry}; // copy = JSON.parse(JSON.stringify(original));
         processedFrameEntry.text = greppedText.slice(0, MAX_STRING_LENGTH);
         processedFrameEntry.content = undefined;
         frameViewArray.push(processedFrameEntry);
@@ -122,7 +120,6 @@ export default class FrameDataArray {
     return frameViewArray;
   }
 }
-
 
 /*
 FrameDataObject = {

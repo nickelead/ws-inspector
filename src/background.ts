@@ -43,7 +43,7 @@ chrome.browserAction.onClicked.addListener((tab) => {
         return;
       }
 
-      // inspector Local and inspector should be identical  TODO delete inspectorLocal?
+      // inspector Local and inspector should be identical  TODO delete inspectorLocal
       const inspectorLocal = inspectors.find(({ id }) => id === tab.id);
       // if inspector window exists it get reattached and focused
       if (inspectorLocal) {

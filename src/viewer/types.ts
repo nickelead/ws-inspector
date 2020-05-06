@@ -27,3 +27,16 @@ export interface NetworkWebSocketParams {
   timestamp: number;
   response: WebSocketFrame;
 }
+
+/* depreciated types
+type ControlPanelMode = {
+  isCapturing: boolean;
+  onClear: (event: MouseEvent) => void;
+  onFilterModeToggle: (event: MouseEvent) => void;
+  onCapturingToggle: (event: MouseEvent) => void;
+  handleRegName: (arg0: string) => void;
+  handleFilter: (arg0: string) => void;
+};
+
+
+ */

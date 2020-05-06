@@ -4,7 +4,7 @@ import cx from 'classnames';
 import FontAwesome from 'react-fontawesome';
 import { TimeStamp } from '../Helpers/Helper';
 import './FrameTable.scss';
-import { FrameEntry } from '../../FrameData';
+import { FrameEntry } from '../../stores/frameStore';
 
 interface FrameListProps {
   frameViewArray: FrameEntry[];
